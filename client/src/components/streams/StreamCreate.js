@@ -1,5 +1,7 @@
 import React from "react";
 import { Field, reduxForm } from "redux-form";
+import { connect } from "react-redux";
+import { createStream } from "../../actions";
 
 class StreamCreate extends React.Component {
   renderError({ error, touched }) {
@@ -25,9 +27,11 @@ class StreamCreate extends React.Component {
     ); //new syntax, take all those key value pairs and add them as properties to the input element
   };
 
-  onSubmit = formValue => {
-    console.log(formValue);
+  onSubmit = formValues => {
+    //After validate, call 'createStream' -> Run in actoin/index.js -> make a request over to API server and create a new stream.
+    this.props.createStream(formValues);
   };
+
   render() {
     return (
       <form
@@ -47,20 +51,24 @@ class StreamCreate extends React.Component {
 }
 
 //Validate -> Check the input statement
-const validate = formValue => {
+const validate = formValues => {
   const error = {};
-  if (!formValue.title) {
+  if (!formValues.title) {
     //Only run if the user did not enter the title
     error.title = "Please Enter a Title!";
   }
-  if (!formValue.description) {
+  if (!formValues.description) {
     error.description = "Please Enter Description!";
   }
 
   return error;
 };
-//form:'FORM_NAME'
-export default reduxForm({
+
+const formWrapped = reduxForm({
+  //form:'FORM_NAME'
   form: "streamCreate",
   validate: validate
 })(StreamCreate);
+
+//Wrap all the functoin above and make it to export default connect()() syntax
+export default connect(null, { createStream })(formWrapped);

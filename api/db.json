@@ -1,3 +1,14 @@
 {
-  "streams": []
+  "streams": [
+    {
+      "title": "Stream",
+      "description": "This is my Stream",
+      "id": 1
+    },
+    {
+      "title": "Stream Game",
+      "description": "This is my Stream Game",
+      "id": 2
+    }
+  ]
 }

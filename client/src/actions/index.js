@@ -1,4 +1,5 @@
 import streams from '../apis/Streams';
+import history from '../history';
 import {
   SIGN_IN,
   SIGN_OUT,
@@ -24,9 +25,12 @@ export const signOut = () => {
 
 export const createStream = formValues => async (dispatch, getState) => {
   const { userId } = getState().auth; //get userId.
-  const response = await streams.post('/streams', { ...formValues, userId }); //W rap userId into formValue
+  const response = await streams.post('/streams', { ...formValues, userId }); //Wrap userId into formValue
 
   dispatch({ type: CREATE_STREAM, payload: response.data });
+  // Programmatic Navigation to get the user back to
+  // root route after recieved the action creator (new formValue).
+  history.push('/');
 };
 
 export const fetchStreams = () => async dispatch => {
@@ -43,9 +47,10 @@ export const fetchStream = id => async dispatch => {
 
 //change the formValues as well
 export const editStream = (id, formValues) => async dispatch => {
-  const response = await streams.put(`/streams/${id}`, formValues);
+  const response = await streams.patch(`/streams/${id}`, formValues); //put -> change all the properties. patch -> change some properties
 
   dispatch({ type: EDIT_STREAM, payload: response.data });
+  history.push('/'); //After Edited the Stream, direct back to Stream list
 };
 
 //Delete doesn't need response.
